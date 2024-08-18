@@ -1,11 +1,10 @@
 package com.ecom.project.entity;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.ToString;
 
 import java.time.LocalDateTime;
 
@@ -13,10 +12,9 @@ import java.time.LocalDateTime;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString
+@Table(name = "product")
 public class Product {
     @Id
-    @JsonProperty(value = "product_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
@@ -25,8 +23,10 @@ public class Product {
     private int price;
 
     @Lob
+    @Column(name = "image", columnDefinition = "LONGBLOB")
+    @JsonIgnore(value = true)
     private byte[] image;
 
     @Column(name = "created_at", nullable = false, updatable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
-    private LocalDateTime date;
+    private LocalDateTime date = LocalDateTime.now();
 }

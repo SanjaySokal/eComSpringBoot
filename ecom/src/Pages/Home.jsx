@@ -5,78 +5,40 @@ const Home = () => {
     const [html, setHtml] = useState(<h2>please wait....</h2>);
     const [change, setChange] = useState(1);
     useEffect(() => {
-        setHtml(<div className="row">
-            <div className="col-lg-4 col-md-6">
-                <SingleProduct
-                    name="Mouse"
-                    product_id={25}
-                    image="https://upload.wikimedia.org/wikipedia/commons/thumb/2/22/3-Tasten-Maus_Microsoft.jpg/640px-3-Tasten-Maus_Microsoft.jpg"
-                    price={1500}
-                    addToCart={() => addToCart(25)}
-                    deleteProduct={() => deleteProduct(25)}
-                />
-            </div>
-            <div className="col-lg-4 col-md-6">
-                <SingleProduct
-                    name="Mouse"
-                    product_id={25}
-                    image="https://upload.wikimedia.org/wikipedia/commons/thumb/2/22/3-Tasten-Maus_Microsoft.jpg/640px-3-Tasten-Maus_Microsoft.jpg"
-                    price={1500}
-                    addToCart={() => addToCart(25)}
-                    deleteProduct={() => deleteProduct(25)}
-                />
-            </div>
-            <div className="col-lg-4 col-md-6">
-                <SingleProduct
-                    name="Mouse"
-                    product_id={25}
-                    image="https://upload.wikimedia.org/wikipedia/commons/thumb/2/22/3-Tasten-Maus_Microsoft.jpg/640px-3-Tasten-Maus_Microsoft.jpg"
-                    price={1500}
-                    addToCart={() => addToCart(25)}
-                    deleteProduct={() => deleteProduct(25)}
-                />
-            </div>
-            <div className="col-lg-4 col-md-6">
-                <SingleProduct
-                    name="Mouse"
-                    product_id={25}
-                    image="https://upload.wikimedia.org/wikipedia/commons/thumb/2/22/3-Tasten-Maus_Microsoft.jpg/640px-3-Tasten-Maus_Microsoft.jpg"
-                    price={1500}
-                    addToCart={() => addToCart(25)}
-                    deleteProduct={() => deleteProduct(25)}
-                />
-            </div>
-            <div className="col-lg-4 col-md-6">
-                <SingleProduct
-                    name="Mouse"
-                    product_id={25}
-                    image="https://upload.wikimedia.org/wikipedia/commons/thumb/2/22/3-Tasten-Maus_Microsoft.jpg/640px-3-Tasten-Maus_Microsoft.jpg"
-                    price={1500}
-                    addToCart={() => addToCart(25)}
-                    deleteProduct={() => deleteProduct(25)}
-                />
-            </div>
-            <div className="col-lg-4 col-md-6">
-                <SingleProduct
-                    name="Mouse"
-                    product_id={25}
-                    image="https://upload.wikimedia.org/wikipedia/commons/thumb/2/22/3-Tasten-Maus_Microsoft.jpg/640px-3-Tasten-Maus_Microsoft.jpg"
-                    price={1500}
-                    addToCart={() => addToCart(25)}
-                    deleteProduct={() => deleteProduct(25)}
-                />
-            </div>
-        </div>)
+        fetch("http://localhost:8080/products/all").then(res => res.json()).then(res => {
+            if (typeof (res) === "object") {
+                setHtml(<div className="row">
+                    {res.map((ele, ind) => <div key={ind} className="col-lg-4 col-md-6">
+                        <SingleProduct
+                            name={ele.name}
+                            product_id={ele.id}
+                            image={`http://localhost:8080/products/${ele.id}/image`}
+                            price={ele.price}
+                            addToCart={() => addToCart(ele.id)}
+                            deleteProduct={() => deleteProduct(ele.id)}
+                        />
+                    </div>
+                    )}
+                </div>)
+            }
+        }).catch(err => console.log(err));
+        // eslint-disable-next-line
     }, [change])
 
     const addToCart = (id) => {
-        // setChange(change + 1);
+        setChange(change + 1);
         console.log(id);
     }
 
     const deleteProduct = (id) => {
-        // setChange(change + 1);
-        console.log(id);
+        setChange(change + 1);
+        if (window.confirm("sure wanted to delete!")) {
+            fetch("http://localhost:8080/products/delete/" + id).then(res => res.json()).then(res => {
+                if (res) {
+                    window.alert("deleted");
+                }
+            }).catch(err => console.log(err));
+        }
     }
 
     return (
