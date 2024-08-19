@@ -27,9 +27,11 @@ public class OrderRest {
     }
 
     @PostMapping("/add")
-    public ResponseEntity<Boolean> addOrder(@RequestBody Order order) {
+    public ResponseEntity<Boolean> addOrder(@RequestBody List<Order> order) {
         boolean result = service.addUpdate(order);
-        cart.delete(order.getId());
+        for (Order orderIn : order) {
+            cart.delete(orderIn.getId());
+        }
         return new ResponseEntity<>(result, HttpStatus.CREATED);
     }
 

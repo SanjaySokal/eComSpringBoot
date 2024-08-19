@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from 'react'
 import SingleProduct from '../Inc/SingleProduct';
+import { useNavigate } from 'react-router-dom';
 
 const Home = () => {
     const [html, setHtml] = useState(<h2>please wait....</h2>);
     const [change, setChange] = useState(1);
+    const navigate = useNavigate();
     useEffect(() => {
         fetch("http://localhost:8080/products/all").then(res => res.json()).then(res => {
             if (typeof (res) === "object") {
@@ -26,15 +28,29 @@ const Home = () => {
     }, [change])
 
     const addToCart = (id) => {
-        setChange(change + 1);
-        console.log(id);
+        fetch("http://localhost:8080/cart/add", {
+            method: "POST",
+            headers: {
+                "Content-type": "application/json; charset=UTF-8"
+            },
+            body: JSON.stringify({
+                product: {
+                    id: id
+                }
+            })
+        }).then(res => res.json()).then(res => {
+            if (res) {
+                setChange(change + 1);
+                navigate("/cart")
+            }
+        }).catch(err => console.log(err));
     }
 
     const deleteProduct = (id) => {
-        setChange(change + 1);
         if (window.confirm("sure wanted to delete!")) {
             fetch("http://localhost:8080/products/delete/" + id).then(res => res.json()).then(res => {
                 if (res) {
+                    setChange(change + 1);
                     window.alert("deleted");
                 }
             }).catch(err => console.log(err));

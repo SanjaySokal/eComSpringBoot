@@ -20,11 +20,15 @@ const AddNewProduct = () => {
                 },
             })
             .then((response) => {
-                console.log(response);
-                e.target.reset();
-                setName("");
-                setPrice(0);
-                alert("product added!");
+                if (response.data === true) {
+                    e.target.reset();
+                    setName("");
+                    setPrice(0);
+                    alert("product added!");
+                } else {
+                    alert("failed to add")
+                    console.log(response);
+                }
             })
             .catch((error) => {
                 window.alert("file size is big!")

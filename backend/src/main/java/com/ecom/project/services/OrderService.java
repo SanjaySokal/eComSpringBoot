@@ -8,5 +8,5 @@ public interface OrderService {
     List<Order> getAll();
     Order getOne(long id);
     boolean delete(long id);
-    boolean addUpdate(Order order);
+    boolean addUpdate(List<Order> order);
 }

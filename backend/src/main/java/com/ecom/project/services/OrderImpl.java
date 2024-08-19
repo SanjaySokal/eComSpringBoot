@@ -32,8 +32,9 @@ public class OrderImpl implements OrderService {
     }
 
     @Override
-    public boolean addUpdate(Order order) {
-        repo.save(order);
+    public boolean addUpdate(List<Order> order) {
+        repo.saveAll(order);
+//        repo.save(order);
         return true;
     }
 }
